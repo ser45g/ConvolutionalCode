@@ -78,7 +78,7 @@ namespace ConvolutionalCode
 
             if (!_isBinary)
             {
-                textBox3.Text = Encoding.UTF8.GetBytes(textBox1.Text).ToBinaryString();
+                textBox3.Text = Encoding.Unicode.GetBytes(textBox1.Text).ToBinaryString();
 
             }
             else
@@ -103,25 +103,48 @@ namespace ConvolutionalCode
 
             Random random = new Random();
             List<int> errorIndexec = new List<int>();
-            for (int i = 0; i < errorCount; i++)
-            {
-                int index = 0;
-                index = random.Next(1, message.Length);
-                bool isInList = errorIndexec.IndexOf(index) != -1;
-                if (isInList)
-                    continue;
-
-                errorIndexec.Add(index);
-                if (message[index] == '0')
+            for (int i = 0; i < message.Length; ++i)
+            {             
+                if ((errorProb-random.Next(1, 101))>=0)
                 {
-                    message = message.ReplaceAt(index, '1');
+                    errorIndexec.Add(i);
+                    if (message[i] == '0')
+                    {
+                        message = message.ReplaceAt(i, '1');
+                    }
+                    else
+                    {
+                        message = message.ReplaceAt(i, '0');
+                    }
                 }
-                else
-                {
-                    message = message.ReplaceAt(index, '0');
-                }
-                //message.ReplaceAt(index, message[index] == '0' ? '1' : '0');
             }
+            //for (int i = 0; i < errorCount; i++)
+            //{
+            //    int index = 0;
+            //    index = random.Next(1, message.Length);
+            //    bool isInList = errorIndexec.IndexOf(index) != -1;
+            //    if (isInList)
+            //        continue;
+            //
+            //    errorIndexec.Add(index);
+            //   // int kdd = message.Length;
+            //    if (message[index] == '0')
+            //    {
+            //        message = message.ReplaceAt(index, '1');
+            //    }
+            //    else
+            //    {
+            //        message = message.ReplaceAt(index, '0');
+            //    }
+            //    //int fffl = message.Length;
+            //    //if (kdd != fffl)
+            //    //{
+            //    //    MessageBox.Show("??");
+            //    //}
+            //    //message.ReplaceAt(index, message[index] == '0' ? '1' : '0');
+            //}
+
+
             for (int i = 0; i < message.Length; i++)
             {
                 bool isInList = errorIndexec.IndexOf(i) != -1;
@@ -133,7 +156,6 @@ namespace ConvolutionalCode
                 else
                 {
                     richTextBox1.AppendText(message[i].ToString(), Color.Black);
-
                 }
 
             }
@@ -143,7 +165,7 @@ namespace ConvolutionalCode
             string decodedBinString = "";
             if (!_isBinary)
             {
-                decodedBinString = Encoding.UTF8.GetString(
+                decodedBinString = Encoding.Unicode.GetString(
                     decoder.Decode(message.ToBoolArrayString()).ToBinaryString().FromBinaryString());
 
             }
@@ -153,12 +175,14 @@ namespace ConvolutionalCode
 
             }
 
-
-
-            for (int i = 0; i < decodedBinString.Length; i++)
+            int l=textBox1.Text.Length;
+            int k=decodedBinString.Length;
+            //if (l != k)
+            //{
+            //    MessageBox.Show("???");
+            //}
+            for (int i = 0; i < ((l>k)?k:l); i++)
             {
-
-
                 if (decodedBinString[i] != textBox1.Text[i])
                 {
                     richTextBox2.AppendText(decodedBinString[i].ToString(), Color.Red
